@@ -451,6 +451,7 @@ Maybe I should add a new state.
 
                           '("o" . meow-open-below)
                           '("O" . meow-open-above)
+
                           '("p" . meow-yank)
                           '("P" . meow-yank-pop);;
                           '("q" . meow-quit)
@@ -610,6 +611,19 @@ Maybe I should add a new state.
     ("i" "immersive translate buffer" immersive-translate-buffer)
     ]])
 #+end_src
+*** window
+#+begin_src elisp
+(transient-define-prefix +window()
+  "Define leader-key map for window"
+  [
+   ["split"
+    ("v" "split window vertical " split-window-vertically)
+    ("h" "split window horizontal" split-window-horizontally)]
+   ["move"
+    ("w" "move windows" other-window)
+    ("o" "delete other window" delete-other-windows)]
+    ])
+#+end_src
 *** buffer
 #+begin_src elisp
 (transient-define-prefix buffer-leader-map()
@@ -748,11 +762,16 @@ Maybe I should add a new state.
  '("/" . meow-keypad-describe-key)
  '("?" . meow-cheatsheet))
 
-;; buffer
+
 (meow-leader-define-key
+;; M-x
+ '("SPC" . execute-extended-command)
+;; buffer
  '("b" . buffer-leader-map)
 ;; lewisliu
  '("e" . lewis-leader-map)
+;; windows
+ '("w" . +window)
 ;; search
  '("s" . search-leader-map)
 ;; apps
@@ -1206,7 +1225,9 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
 (setq vertico-cycle t)
 (setup vertico
   (:with-map vertico-map
-    (:bind [backspace] vertico-directory-delete-char))
+    (:bind [backspace] vertico-directory-delete-char
+           "C-j" vertico-next
+           "C-k" vertico-previous))
   (vertico-mode))
 #+end_src
 ** Orderless and pinyinlib
@@ -1253,6 +1274,7 @@ should be check after reading the embark.el manual
   )
 #+end_src
 ** tempel
+
 #+begin_src elisp
 (setup tempel
   (setq tempel-path "~/.emacs.d/useful-tools/tempel-snippets"
@@ -1517,7 +1539,7 @@ Dirvish is a minimalistic file manager based on Dired. It's fast
            )
   )
 #+end_src
-*** boxy-imenu
+***
 #+begin_src elisp
 (setup boxy)
 (setup boxy-imenu)
