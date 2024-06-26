@@ -11,7 +11,6 @@ I failed in love with denote, so previous *org-roam* configs were refiled into [
 - [[#package-management][Package Management]]
   - [[#setup][setup]]
   - [[#epkg][epkg]]
-- [[#gcmh][gcmh]]
 - [[#keyboard-bindings][Keyboard Bindings]]
   - [[#meow][meow]]
   - [[#transient-and-related-leader-map][transient and related leader-map]]
@@ -358,7 +357,7 @@ I use borg to manage packages, so setup.el is only used to config packages quick
 ;;   (setq epkg-database-connector 'sqlite-builtin))
 ;; (setup epkg)
 #+end_src
-* gcmh
+ gcmh
 Enforce a sneaky Garbage Collection strategy to minimize GC interference with user activity.
 #+name: gcmh
 #+begin_src elisp
@@ -579,7 +578,7 @@ Maybe I should add a new state.
 #+end_src
 *** find-file
 #+begin_src elisp
-(transient-define-prefix file-leader-map()
+(transient-define-prefix +file()
   "Define leader-key map for file-related functions"
   [["config"
     ("p" "personal emacs config" (lambda()
@@ -626,7 +625,7 @@ Maybe I should add a new state.
 #+end_src
 *** buffer
 #+begin_src elisp
-(transient-define-prefix buffer-leader-map()
+(transient-define-prefix +buffer()
   "Define leader-key map for buffer functions"
   [["Buffer"
     ("b" "consult-buffer" consult-buffer) ;; work with C-x b
@@ -647,7 +646,7 @@ Maybe I should add a new state.
 #+end_src
 *** notes
 #+begin_src elisp
-(transient-define-prefix notes-leader-map()
+(transient-define-prefix +notes()
   "Define leader-key map for notes functions"
   [["Roam"
     ("r f" "denote-open-or-create" denote-open-or-create)
@@ -681,7 +680,7 @@ Maybe I should add a new state.
 #+end_src
 *** search
 #+begin_src elisp
-(transient-define-prefix search-leader-map()
+(transient-define-prefix +search()
   "Define leader-key map for search functions"
   [
    ;; ["blink-search"
@@ -704,7 +703,7 @@ Maybe I should add a new state.
 #+end_src
 *** apps
 #+begin_src elisp
-(transient-define-prefix apps-leader-map()
+(transient-define-prefix +apps()
   "Define leader-key map for apps functions"
   [["agenda"
     ("a" "org-agenda" org-agenda)
@@ -767,19 +766,19 @@ Maybe I should add a new state.
 ;; M-x
  '("SPC" . execute-extended-command)
 ;; buffer
- '("b" . buffer-leader-map)
+ '("b" . +buffer)
 ;; lewisliu
  '("e" . lewis-leader-map)
 ;; windows
  '("w" . +window)
 ;; search
- '("s" . search-leader-map)
+ '("s" . +search)
 ;; apps
- '("a" . apps-leader-map)
+ '("a" . +apps)
 ;; file
- '("f" . file-leader-map)
+ '("f" . +file)
 ;; notes
- '("n" . notes-leader-map)
+ '("n" . +notes)
  ;;w workspace
  '("TAB" . tabspaces-leader-map)
  ;; ;; org gtd
