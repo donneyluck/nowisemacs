@@ -41,6 +41,7 @@ I failed in love with denote, so previous *org-roam* configs were refiled into [
 - [[#general-configuration][General Configuration]]
   - [[#simple][simple]]
   - [[#general-builtin-modes][general builtin modes]]
+  - [[#minibuffer][minibuffer]]
   - [[#repeat-mode][repeat-mode]]
   - [[#backup][backup]]
   - [[#no-littering][no-littering]]
@@ -51,6 +52,7 @@ I failed in love with denote, so previous *org-roam* configs were refiled into [
   - [[#automatically-clean-whitespace][Automatically clean whitespace]]
   - [[#exec-path-from-shell][exec-path-from-shell]]
   - [[#undo][Undo]]
+  - [[#automatically-insert-minibuffer][Automatically insert minibuffer]]
 - [[#search][Search]]
   - [[#isearch][isearch]]
   - [[#consult-commands][Consult Commands]]
@@ -729,7 +731,7 @@ Maybe I should add a new state.
 
 *** ui
 #+begin_src elisp
-(transient-define-prefix toggle-leader-map()
+(transient-define-prefix +toggle()
   "Define leader-key map for ui functions"
   [("v" "toggle-variable-pitch" variable-pitch-mode)
    ("d" "toggle-darkroom" darkroom-mode)
@@ -783,8 +785,8 @@ Maybe I should add a new state.
  '("TAB" . tabspaces-leader-map)
  ;; ;; org gtd
  ;; '("d" . org-gtd-leader-map)
- ;; ui
- '("t" . toggle-leader-map)
+ ;; tools
+ '("t" . +toggle)
  )
 #+END_SRC
 ** which-key
@@ -1081,6 +1083,10 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
   (when (>= emacs-major-version 29)
     (pixel-scroll-precision-mode t)))
 #+end_src
+** minibuffer
+#+begin_src elisp
+(setq enable-recursive-minibuffers t)
+#+end_src
 ** repeat-mode
 #+begin_src elisp
 (setup repeat
@@ -1166,6 +1172,57 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
          "j" vundo-next
          "k" vundo-previous))
 #+end_src
+** Automatically insert minibuffer
+#+name: auto insert minibuffer
+#+begin_src elisp
+(defgroup elemacs-mcfly nil
+  "Elemacs fly key."
+  :group 'elemacs)
+
+(defcustom elemacs-mcfly-commands '(consult-line
+                                    consult-outline
+                                    consult-git-grep
+									eli/consult-git-grep
+                                    consult-ripgrep
+                                    my-search-with-chrome
+                                    anki-helper-find-notes
+                                    eli/silverdict-pop-posframe-toggle
+                                    souyun-query-char)
+  "Commands that need pre-insert candidate."
+  :group 'elemacs-mcfly
+  :type '(repeat function))
+
+(defvar elemacs-mcfly-back-commands '(self-insert-command
+                                      yank
+                                      yank-pop
+                                      org-yank))
+
+(defun elemacs-mcfly-back-to-present ()
+  (remove-hook 'pre-command-hook 'elemacs-mcfly-back-to-present t)
+  (cond ((and (memq last-command elemacs-mcfly-commands)
+              (equal (this-command-keys-vector) (kbd "M-p")))
+         ;; repeat one time to get straight to the first history item
+         (setq unread-command-events
+               (append unread-command-events
+                       (listify-key-sequence (kbd "M-p")))))
+        ((memq this-command elemacs-mcfly-back-commands)
+         (delete-region (point) (point-max)))))
+
+(defun elemacs-mcfly-time-travel ()
+  (when (memq this-command elemacs-mcfly-commands)
+    (let ((pre-insert-string (with-minibuffer-selected-window
+                               (or (seq-some
+                                    (lambda (thing) (thing-at-point thing t))
+					                '(region url))
+					               ;; '(symbol url region sexp))
+			                       "No thing at point"))))
+      (save-excursion
+        (insert (propertize pre-insert-string 'face 'shadow))))
+    (add-hook 'pre-command-hook 'elemacs-mcfly-back-to-present nil t)))
+
+;; setup code
+(add-hook 'minibuffer-setup-hook #'elemacs-mcfly-time-travel)
+#+end_src
 * Search
 ** isearch
 #+begin_src elisp
@@ -1226,7 +1283,9 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
   (:with-map vertico-map
     (:bind [backspace] vertico-directory-delete-char
            "C-j" vertico-next
-           "C-k" vertico-previous))
+           "C-k" vertico-previous
+           "C-S-v" yank-from-kill-ring
+           ))
   (vertico-mode))
 #+end_src
 ** Orderless and pinyinlib
