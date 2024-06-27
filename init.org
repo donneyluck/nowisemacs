@@ -971,7 +971,7 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
         dashboard-set-heading-icons t
         dashboard-set-file-icons t
         dashboard-center-content t
-        dashboard-startup-banner (concat nowis-config-useful-tools "banner.txt")
+        dashboard-startup-banner (concat nowis-config-useful-tools "anonymous.png")
         dashboard-set-init-info t)
   (dashboard-setup-startup-hook)
   )
