@@ -697,8 +697,9 @@ Maybe I should add a new state.
    ["built-in enhance"
     ("h" "history" consult-history)
     ("i" "imenu" consult-imenu)
-    ("l" "keep-lines" consult-keep-lines)
-    ("s" "line" consult-line)]
+    ;; ("l" "keep-lines" consult-keep-lines)
+    ("l" "line" consult-line)
+    ("s" "rg" consult-ripgrep)]
    ["web search"
     ("w" "webjump" webjump)]
    ])
@@ -902,6 +903,9 @@ Maybe I should add a new state.
 
 (nowis-setup-fonts)
 #+end_src
+
+#+RESULTS: font
+
 ** variable-pitch
 #+begin_src elisp
 (defun dynamic-change-line-spacing( &optional ARG)
@@ -1174,7 +1178,7 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
 #+end_src
 ** Automatically insert minibuffer
 #+name: auto insert minibuffer
-#+begin_src elisp
+#+begin_src elisp :tangle no
 (defgroup elemacs-mcfly nil
   "Elemacs fly key."
   :group 'elemacs)
