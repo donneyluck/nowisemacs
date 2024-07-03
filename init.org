@@ -143,6 +143,7 @@ I failed in love with denote, so previous *org-roam* configs were refiled into [
   - [[#server][server]]
   - [[#atomic-chrome][atomic-chrome]]
   - [[#macos-ocr][macos-ocr]]
+  - [[#tldr][tldr]]
 - [[#use-single-file-to-load-configs][use single file to load configs]]
   - [[#provide][provide]]
   - [[#load-init-configel][load init-config.el]]
@@ -618,8 +619,8 @@ Maybe I should add a new state.
   "Define leader-key map for window"
   [
    ["split"
-    ("v" "split window vertical " split-window-vertically)
-    ("h" "split window horizontal" split-window-horizontally)]
+    ("h" "split window vertical " split-window-vertically)
+    ("v" "split window horizontal" split-window-horizontally)]
    ["move"
     ("w" "move windows" other-window)
     ("o" "delete other window" delete-other-windows)]
@@ -644,6 +645,18 @@ Maybe I should add a new state.
     ("w" "burly-bookmark-windows" burly-bookmark-windows)
     ("o" "burly-open-bookmark" burly-open-bookmark)
     ]]
+  )
+#+end_src
+*** helper
+#+begin_src elisp
+(transient-define-prefix +helper()
+  "Define leader-key map for help functions"
+  [["Helpful"
+    ("f" "helpful-callable" helpful-callable)
+    ("k" "helpful-key" helpful-key)
+    ("v" "helpful-variable" helpful-variable)]
+   ["Theme"
+    ("t" "tldr" tldr)]]
   )
 #+end_src
 *** notes
@@ -729,15 +742,13 @@ Maybe I should add a new state.
      ]
     ])
 #+end_src
-
-*** ui
+*** toggle
 #+begin_src elisp
 (transient-define-prefix +toggle()
-  "Define leader-key map for ui functions"
+  "Define leader-key map for toggle functions"
   [("v" "toggle-variable-pitch" variable-pitch-mode)
    ("d" "toggle-darkroom" darkroom-mode)
     ])
-
 #+end_src
 ** meow leader keybindings
 #+name: meow-leader-keys
@@ -776,6 +787,8 @@ Maybe I should add a new state.
  '("w" . +window)
 ;; search
  '("s" . +search)
+;; helper
+ '("h" . +helper)
 ;; apps
  '("a" . +apps)
 ;; file
@@ -3425,6 +3438,12 @@ Edit text area on Chrome with Emacs using Atomic Chrome
   )
 (keymap-global-set "C-c M-o" #'my/siri-ocr)
 #+end_src
+** tldr
+Tool long do not read
+#+begin_src elisp
+(setup tldr)
+#+end_src
+
 * use single file to load configs
 this can avoid errors of native compilation of init.el
 ** provide

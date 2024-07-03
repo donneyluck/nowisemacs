@@ -346,6 +346,9 @@
 [submodule "templatel"]
 	path = lib/templatel
 	url = https://github.com/clarete/templatel.git
+[submodule "tldr"]
+	path = lib/tldr
+	url = https://github.com/kuanyui/tldr.el.git
 [submodule "toc-org"]
 	path = lib/toc-org
 	url = https://github.com/snosov1/toc-org.git
