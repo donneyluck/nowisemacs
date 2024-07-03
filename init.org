@@ -1178,7 +1178,7 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
 #+end_src
 ** Automatically insert minibuffer
 #+name: auto insert minibuffer
-#+begin_src elisp :tangle no
+#+begin_src elisp
 (defgroup elemacs-mcfly nil
   "Elemacs fly key."
   :group 'elemacs)
@@ -1220,8 +1220,10 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
 					                '(region url))
 					               ;; '(symbol url region sexp))
 			                       "No thing at point"))))
+      (progn
+      (meow--cancel-selection)
       (save-excursion
-        (insert (propertize pre-insert-string 'face 'shadow))))
+        (insert (propertize pre-insert-string 'face 'shadow)))))
     (add-hook 'pre-command-hook 'elemacs-mcfly-back-to-present nil t)))
 
 ;; setup code
