@@ -1199,12 +1199,9 @@ diff-hl-mode highlights uncommitted changes on the left side of the window (area
 (defcustom elemacs-mcfly-commands '(consult-line
                                     consult-outline
                                     consult-git-grep
-									eli/consult-git-grep
                                     consult-ripgrep
-                                    my-search-with-chrome
-                                    anki-helper-find-notes
-                                    eli/silverdict-pop-posframe-toggle
-                                    souyun-query-char)
+                                    helpful-variable
+                                    helpful-callable)
   "Commands that need pre-insert candidate."
   :group 'elemacs-mcfly
   :type '(repeat function))
